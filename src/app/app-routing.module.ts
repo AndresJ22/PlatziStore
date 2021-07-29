@@ -9,6 +9,8 @@ import { ContactComponent } from './contact/components/contact/contact.component
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProductDetailComponent } from './product/components/product-detail/product-detail.component';
 import { LayoutComponent } from './layout/layout.component';
+import { OrderModule } from './order/order.module';
+import { AdminGuard } from './admin.guard';
 const routes: Routes = [
   {
     path: '',
@@ -34,16 +36,27 @@ const routes: Routes = [
         loadChildren: () =>
           import('./contact/contact.module').then((m) => m.ContactModule),
       },
+      {
+        path: 'order',
+        loadChildren: () =>
+          import('./order/order.module').then((m) => m.OrderModule),
+      },
+      {
+        path: 'demo',
+        loadChildren: () =>
+          import('./demo/demo.module').then((m) => m.DemoModule),
+      },
     ],
   },
   {
-    path: 'demo',
-    loadChildren: () => import('./demo/demo.module').then((m) => m.DemoModule),
-  },
-  {
     path: 'admin',
+    canActivate: [AdminGuard],
     loadChildren: () =>
       import('./admin/admin.module').then((m) => m.AdminModule),
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: '**',

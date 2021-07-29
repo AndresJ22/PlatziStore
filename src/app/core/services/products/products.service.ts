@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Producto } from '../../models/product.model';
-
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  constructor(private http:HttpClient) {}
+  api = environment.url_api;
+  constructor(private http: HttpClient) {}
 
+  /*
   products: Producto[] = [
     // para ser iterable debe ser netamente array
     {
@@ -53,12 +55,23 @@ export class ProductsService {
       descripcion: 'bla bla bla bla bla',
     },
   ];
+  */
   getAllProducts() {
-    return this.products;
+    return this.http.get<Producto[]>(`${environment.url_api}/products`);
   }
 
   getProduct(id: string) {
+    console.log(`${environment.url_api}/${id}`);
     //return this.products.find(item => id === item.id);  // find metodo array js
-    return this.products.find((item) => id === item.id);
+    return this.http.get<Producto>(`${environment.url_api}/products/${id}`);
+  }
+  createProduct(product: Producto) {
+    return this.http.post(`${this.api}/products`, product);
+  }
+  updateProduct(id:string,changes:Partial<Producto>) {
+    return this.http.put(`${this.api}/products/${id}`, changes);
+  }
+  deleteProduct(id: string) {
+    return this.http.delete(`${this.api}/products/${id}`);
   }
 }
